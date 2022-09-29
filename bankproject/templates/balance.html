@@ -90,7 +90,7 @@
     <a class="nav-link active" aria-current="page" href="#">Home</a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="BankDetails2.html">Bank Details </a>
+    <a class="nav-link" href="BankDetails.html">Bank Details </a>
     </li>
     <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -164,7 +164,7 @@
                 <br>
                 <input type="tel" name="account_number" value="{{ user.username }}" hidden>
                     <input type="email"  placeholder="  enter email " name="email" value="{{ user.email }}" hidden >
-                <input type="number"  placeholder="  enter your pin " name="pin1" required><br> <br>
+                <input type="text" pattern="[0-9]*" inputmode="numeric" style="-webkit-text-security:disc;" maxlength="4"  placeholder="  enter your pin " name="pin1" required><br> <br>
                 
                 
                 <button class="btn btn-primary" style="background-color:#36454f;" type="submit">DONE</button><br><br>

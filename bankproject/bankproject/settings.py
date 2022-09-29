@@ -30,26 +30,26 @@ EMAIL_HOST_PASSWORD=EMAIL_HOST_PASSWORD
 SECRET_KEY = 'django-insecure-#r(@@=oweotyjsxmk#9o_$i#p-be^%5-y+6m0d@at-4$+3k77y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'bankingSolutuon.apps.BankingsolutuonConfig',
+    'bankingSolution.apps.BankingsolutionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'bankingSolution.context.dates'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

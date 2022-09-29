@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -553,6 +554,7 @@ $(document).ready(function(){
   display: none;
   }
 </style>
+
 <body>
     <div class="background_color">
         <div id="clr"><a href= "#">BANK-PAY</a></div>
@@ -568,7 +570,7 @@ $(document).ready(function(){
         
          <div class="card-body">
             <h5 class="card-title">Welcome To Bank-Pay</h5>
-            <img src="https://scontent.fbom15-1.fna.fbcdn.net/v/t39.30808-6/278290474_160909806331701_4499686032203952339_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=ReR6QnVqiaIAX-cIm7f&_nc_ht=scontent.fbom15-1.fna&oh=00_AT9-wAqg734N9tY6LC92x4XmfvkCBqL7mq6-_vdMz53_xg&oe=6265C619" class="card-img-top">
+            <img src="{% static 'bankpay.jpg' %}" class="card-img-top">
             <p class="card-text"> {% if messages %}
                 {% for message in messages %}
                 <div class="alert alert-{{ message}} alert-dismissible fade show my-0" role="alert">

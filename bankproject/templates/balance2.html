@@ -64,18 +64,6 @@
 }
    
  </style>  
- <script>
-    document.addEventListener("DOMContentLoaded", () => {
-    const recentImageDataUrl = localStorage.getItem("recent-image");
-    
-    
-    if (recentImageDataUrl) {
-    document.querySelector("#imgPreview").setAttribute("src",recentImageDataUrl);
-    
-    }
-    });
-    
-    </script>   
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -90,7 +78,7 @@
     <a class="nav-link active" aria-current="page" href="#">Home</a>
     </li>
     <li class="nav-item">
-    <a class="nav-link" href="BankDetails2.html">Bank Details </a>
+    <a class="nav-link" href="BankDetails.html">Bank Details </a>
     </li>
     <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -169,7 +157,7 @@
                 <th> Amount Withdraw     </th>
                 <th> Money Send     </th>
                 <th> Mobile Recharge    </th></tr>
-                <tr><td>   
+                <tr><td style="vertical-align: text-top;">   
          {% for credit in credits %}
         
           <li> <h5>&#8377 {{credit}}</h5>
@@ -178,7 +166,7 @@
             
          {% endfor %}
         </td>
-        <td> 
+        <td style="vertical-align: text-top;"> 
         
         {% for withdraw in withdraws %}
         
@@ -188,7 +176,7 @@
         {% endfor %}
         
         </td>
-        <td>
+        <td style="vertical-align: text-top;">
         {% for moneysend in moneysends %}
          
          <li><h5>&#8377 {{moneysend}} </h5>
@@ -197,7 +185,7 @@
            
         {% endfor %}
         </td>
-        <td> 
+        <td style="vertical-align: text-top;"> 
         {% for recharge in recharges %}
         
          <li><h5>&#8377 {{recharge}} </h5>

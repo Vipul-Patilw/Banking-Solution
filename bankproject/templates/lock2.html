@@ -551,8 +551,8 @@
 {% endif %}
 <br>
     <input type="email"  placeholder="  enter email " name="email" value="{{ user.email }}" hidden >
-<input type="number"  placeholder="  enter your pin " name="pin1"  required><br> <br>
 
+<input type="text" pattern="[0-9]*" inputmode="numeric" style="-webkit-text-security:disc;" name="pin1" maxlength="4"><br><br>
 
 <button class="button" type="submit">DONE</button><br><br><br><br>
 </form>
