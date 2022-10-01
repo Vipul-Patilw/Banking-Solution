@@ -93,13 +93,16 @@
   <li class="nav-item">
     <a class="nav-link" href="changePin.html">Change pin </a>
     </li>
-  <li class="nav-item">
-  <a class="nav-link" href="setting.html">Settings</a>
+ 
+   <li class="nav-item">
+  <a class="nav-link" href="moneyrecived-{{user.username}}-{{date_without_time}}">Money Recived {% for money in moneyrecivedcount %}{{money.name}}{% endfor %}</a>
   </li>
   <li class="nav-item">
   <a class="nav-link" href="map.html">map</a>
   </li>
-  
+   <li class="nav-item">
+  <a class="nav-link" href="setting.html">Settings</a>
+  </li>
   </ul>
   <form class="d-flex">
   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -214,7 +217,7 @@
           <textarea class="form-control" id="location" placeholder="enter address" id="message-text" name="address" required></textarea>
           </div>
           <div class="mb-3">
-          <input type="text" value="{{date}}" name="add" hidden>
+          <input type="text" value="{{date}}" name="date" hidden>
           
           <label for="recipient-name" class="col-form-label">Amount :</label>
           <input type="email" placeholder="enter email" class="form-control" id="recipient-name" value="{{ user.email }}" name="email" hidden >

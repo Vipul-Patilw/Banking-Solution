@@ -144,7 +144,11 @@
  </div>
      <div class="card-body">
   
-    {% if messages%}
+
+    <br>
+  
+            <div class="content">
+                    {% if messages%}
     {% for message in messages %}
     <div class="alert alert-{{ messages }} alert-dismissible fade show my-0" role="alert" style="background-color:#FFFFE0;color:red;">
     {{ message }}
@@ -152,12 +156,6 @@
     </div>
     {% endfor %}
     {% endif %}
-    <br>
-     <button class="btn btn-primary" style="background-color:#36454f;" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent4" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><h5 class="card-title">Balance </h5></button></form>
-   <br>  <div class="collapse navbar-collapse" id="navbarSupportedContent4">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item my-3">
-            <div class="content">
                 <form method="post">
                   {% csrf_token %}
                  

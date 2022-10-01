@@ -552,10 +552,11 @@
        <br>
   <form method="post">
     {% csrf_token %}
+      <input type="text"   name="account_number" value="{{ user.username }}" hidden >
   <input type="email"  placeholder="  enter email " name="email" value="{{ user.email }}" hidden >
   
-<input type="number"  placeholder="  enter pin " name="pin1" required><br> <br>
-<input type="number" placeholder="  re-enter pin" name="pin2" required><br> <br>
+<input type="number"  pattern="[0-9]*" inputmode="numeric" style="-webkit-text-security:disc;" placeholder="  enter pin " name="pin1" required><br> <br>
+<input type="number" pattern="[0-9]*" inputmode="numeric" style="-webkit-text-security:disc;" placeholder="  re-enter pin" name="pin2" required><br> <br>
 
 
 <button class="button" type="submit">DONE</button></form><br><br>

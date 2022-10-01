@@ -33,7 +33,7 @@ from django.utils.http import urlsafe_base64_decode
 from . tokens import generate_token
 from django.core.mail import EmailMessage, send_mail
 from django.db import  transaction
-from datetime import  datetime
+import  datetime
 from django.views import  View
 # Create your views here.
 
@@ -42,9 +42,6 @@ a = 0.00
 class changePassword(PasswordChangeView):
 	form_class = PasswordChangeForm
 	success_url = reverse_lazy('password_success')
-
-
-
 
 def password_success(request):
 	messages.info(request,"Password Changed Successfully")
@@ -186,10 +183,11 @@ def sign(request):
 		if user is not None:
 			
 			login(request, user)
-			return render (request,'lock.html')
+			if Lock2.objects.filter(account_number=account_number1):
+				return redirect('/lock2.html')
+			else:
+				return redirect('/lock.html')
 			#full_name = user.first_name
-		
-		
 
 		else:
 	#	if str(Loginpassword) == str(b):
@@ -204,14 +202,12 @@ def sign(request):
 	
 def home(request):
 		global a
-		
-		date = datetime.now()
 		if request.method =="POST":
 			try:
 				amount = request.POST.get('amount')
-				add = request.POST.get('add')
+				date = request.POST.get('date')
 				email = request.POST.get('email')
-				credit = Credit(amount=amount,email=email)
+				credit = Credit(amount=amount,email=email,date=date)
 				credit.save()
 				balance = User.objects.get(email=email)
 				bal = Login.objects.get(email=email)
@@ -229,19 +225,14 @@ def home(request):
 				email = EmailMessage(emailsub,emailbody,from_mail,to_mail)
 				email.fail_silently=True
 				email.send()
-				date = datetime.now()
-				return render(request,'/home',{'date':date})
+				return render(request,'/home')
 			except:
 				messages.error(request,"some problem come in our email email has not been send")
 				return redirect ('/home')
-			
-		
 		#	if b == user:
 				#	return render (request,'sendMoney.html')
-			
-			
-	
-		return render (request,"home.html",{'date':date})	
+		
+		return render (request,"home.html")	
 
 
 	
@@ -251,7 +242,8 @@ def withdraw(request):
 		try:
 			email = request.POST.get('email')
 			amount2 = request.POST.get('amount2')
-			withdraw = Withdraw(amount2=amount2, email=email)
+			date = request.POST.get('date')
+			withdraw = Withdraw(amount2=amount2, email=email,date=date)
 			withdraw.save()
 			balance = User.objects.get(email=email)
 			bal = Login.objects.get(email=email)
@@ -260,6 +252,7 @@ def withdraw(request):
 					return redirect ("withdraw.html")
 			else:
 				bal.balance -= float(amount2)
+				bal.save()
 				messages.success(request, amount2 + ", withdraw from your account successfully" )
 				current_site = get_current_site(request)
 				emailsub = "Bank-Pay Transaction"
@@ -278,6 +271,10 @@ def withdraw(request):
 				return redirect ('/withdraw.html')
 	return render (request,"withdraw.html")
 
+def moneyrecived(request,account_number,date):
+	moneyrecived = SendMoney.objects.filter(date__icontains=date).filter(account_number=account_number).all()
+	return render(request,"moneyrecived.html",{'moneyrecived':moneyrecived})
+
 
 def balance(request):
 	if request.method =="POST":
@@ -293,11 +290,12 @@ def balance(request):
 			acc.save()
 			bal = Login.objects.get(account_number=account_number)
 			messages.info(request, bal.balance)
-			credits = Credit.objects.filter(email=passw.email).all()
-			withdraws = Withdraw.objects.filter(email=passw.email).all()
-			moneysends = SendMoney.objects.filter(email=passw.email).all()
-			recharges = MobileRecharge.objects.filter(email=passw.email).all()
-			return render (request,'balance2.html', { 'credits': credits,'withdraws': withdraws,'moneysends': moneysends,'recharges': recharges})
+			credits = Credit.objects.filter(email=passw.email).order_by('date').all()
+			withdraws = Withdraw.objects.filter(email=passw.email).order_by('date').all()
+			moneysends = SendMoney.objects.filter(my_account_number=account_number).order_by('date').all()
+			moneyrecived = SendMoney.objects.filter(account_number=account_number).order_by('date').all()
+			recharges = MobileRecharge.objects.filter(email=passw.email).order_by('date').all()
+			return render (request,'balance2.html', { 'credits': credits,'withdraws': withdraws,'moneysends': moneysends,'recharges': recharges,'moneyrecived':moneyrecived})
 	return render (request,'balance.html')
 	
 def setting(request):
@@ -307,21 +305,22 @@ def sendMoney(request):
 	global a
 	if request.method =="POST":
 
-		try:
+		# try:
 
 			my_account_number = request.POST.get('my_account_number')
 			Bank = request.POST.get('Bank')
 			note = request.POST.get('note')
+			holder_name = request.POST.get('holder_name')
 			account_number = request.POST.get('account_number')
 			confirm_number = request.POST.get('confirm_number')
 			amount = request.POST.get('amount')
 			name = request.POST.get('name')
-			send = SendMoney(my_account_number=my_account_number,account_number=account_number,amount=amount,note=note)
-			send.save()
+			date = request.POST.get('date')
+			send = SendMoney(my_account_number=my_account_number,account_number=account_number,amount=amount,note=note,date=date,name=name,holder_name=holder_name,Bank=Bank)
 			user = User.objects.get(username=my_account_number)
 			bal = Login.objects.get(account_number=my_account_number)
 			bal2 = Login.objects.get(account_number=account_number)
-			usersname = bal2.first_name
+			usersname = bal2.full_name
 			
 		#	if Bank != bal2.bank_name:
 			#	messages.error(request,'bank details are wrong please check and re-enter')
@@ -338,52 +337,56 @@ def sendMoney(request):
 			if confirm_number != account_number:
 					messages.error(request,"account number didn't matched!! Type same account number in confirm account also.")
 					return redirect ('/send')
-					
+			
 			if bal.balance < float(amount):
 								messages.error(request,"Transaction failed!  you don't have sufficient balance")
 								return redirect ('/send')
 							
 				
-			else:
-
+			if Login.objects.filter(full_name=holder_name) and Login.objects.filter(bank_name=Bank):
+								bal = Login.objects.get(account_number=my_account_number)
 								bal2 = Login.objects.get(account_number=account_number)
 								bal.balance -= float(amount)
 								bal.save()
 								bal2.balance += float(amount)
 								bal2.save()
+								send.save()
 								messages.info(request, amount,account_number)
-								current_site = get_current_site(request)
-								emailsub = "Bank-Pay Transaction"
-								emailbody = render_to_string('mailmoneysendtourself.html',{'amount': amount,
-						'domain': current_site.domain,
-						'name': user.first_name,
-						'balance': bal.balance,
-						'name2':bal2.full_name
-						})
-								from_mail = settings.EMAIL_HOST_USER
-								to_mail = [bal.email]
-								email = EmailMessage(emailsub,emailbody,from_mail,to_mail)
-								email.fail_silently=True
-								email.send()
-								emailsub = "Bank-Pay Transaction"
-								emailbody = render_to_string('mailmoneysendtoOther.html',{'amount': amount,
-						'domain': current_site.domain,
-						'name': bal2.full_name,
-						'balance': bal2.balance, 
-						'name2':user.first_name,
-						'note':note})
-								from_mail = settings.EMAIL_HOST_USER
-								to_mail = [bal2.email]
-								email = EmailMessage(emailsub,emailbody,from_mail,to_mail)
-								email.fail_silently=True
-								email.send()
+						# 		current_site = get_current_site(request)
+						# 		emailsub = "Bank-Pay Transaction"
+						# 		emailbody = render_to_string('mailmoneysendtourself.html',{'amount': amount,
+						# 'domain': current_site.domain,
+						# 'name': user.first_name,
+						# 'balance': bal.balance,
+						# 'name2':bal2.full_name
+						# })
+						# 		from_mail = settings.EMAIL_HOST_USER
+						# 		to_mail = [bal.email]
+						# 		email = EmailMessage(emailsub,emailbody,from_mail,to_mail)
+						# 		email.fail_silently=True
+						# 		email.send()
+						# 		emailsub = "Bank-Pay Transaction"
+						# 		emailbody = render_to_string('mailmoneysendtoOther.html',{'amount': amount,
+						# 'domain': current_site.domain,
+						# 'name': bal2.full_name,
+						# 'balance': bal2.balance, 
+						# 'name2':user.first_name,
+						# 'note':note})
+						# 		from_mail = settings.EMAIL_HOST_USER
+						# 		to_mail = [bal2.email]
+						# 		email = EmailMessage(emailsub,emailbody,from_mail,to_mail)
+						# 		email.fail_silently=True
+						# 		email.send()
 								return render (request,'sendDetails.html',{'name':bal2.full_name,
 										'bank':bal2.bank_name,
 										'account':bal2.account_number,
 										'note':note})
-		except:
-			messages.error(request,"Mail cannot be sent")
-			return redirect ('/send')
+			else:
+				messages.error(request,"Please enter bank name and holder name correct check the speling mistake if you done any")
+				return redirect ('/send')
+		# except:
+		# 	messages.error(request,"Mail cannot be sent")
+		# 	return redirect ('/send')
 					
 	return render (request,'sendMoney.html')
 
@@ -403,8 +406,8 @@ def recharge (request):
 	if request.method =="POST":
 			amount = request.POST.get('amount')
 			email = request.POST.get('email')
-
-			recharge =  MobileRecharge(amount=amount,email=email)
+			date = request.POST.get('date')
+			recharge =  MobileRecharge(amount=amount,email=email,date=date)
 			log = Login.objects.get(email=email)
 			recharge.save()
 			if float(amount) > log.balance: 
@@ -446,15 +449,12 @@ def bankDetails (request):
 														'birth':bal.birthdate})
 	return render (request,'BankDetails2.html')
 	
-def bankDetails2(request):
-	if request.method =="POST":
-			email1 = request.POST.get('email1')
+def bankDetails2(request,email1):
 			bal = Login.objects.get(email=email1)
-			return render (request,'BankDetailsEdit.html',{'card':bal.card_number,
+			return redirect ('BankDetailsEdit.html',{'card':bal.card_number,
 														'gender':bal.gender,
 														'mobile':bal.mobile_number,
 														'birth':bal.birthdate})
-	return render (request,'BankDetailsNotice.html')
 
 
 def bankDetailsEdit(request):
@@ -468,9 +468,11 @@ def bankDetailsEdit(request):
 			users = Login.objects.get(email=email)
 			users.full_name = full_name
 			users.mobile_number = mobile_number
+			users.gender = gender
+			users.birthdate = birthdate
 			users.save()
 			
-			return render (request,'BankDetails.html')
+			return redirect('/BankDetails2.html')
 	return render (request,'BankDetailsEdit.html')	
 	
 
@@ -513,7 +515,8 @@ def lock2(request):
 					pin1 = request.POST.get('pin1')
 					pin2 = request.POST.get('pin2')
 					email = request.POST.get('email')
-					generate = Lock2(pin1=pin1,pin2=pin2,email=email)
+					account_number = request.POST.get('account_number')
+					generate = Lock2(pin1=pin1,pin2=pin2,email=email,account_number=account_number)
 					
 					if len(pin1)!= 4:
 						messages.error(request,"pin should be of only 4 numbers")
@@ -576,6 +579,7 @@ def changePin(request):
 			else:
 				change.save()
 				lock.pin1 = new_pin1
+				lock.pin2 = new_pin1
 				lock.save()
 				messages.success(request,"Pin has been changed sucessfully!!")
 				return redirect('/setting.html')

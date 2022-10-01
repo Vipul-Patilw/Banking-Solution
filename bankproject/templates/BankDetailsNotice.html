@@ -560,7 +560,7 @@
     
    <title>Bank Details</title>
 </head>
-<body >
+< >
     
        
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -612,12 +612,10 @@
    <p>(before editing your bank details read this carefully)</p>
    <p>The details you are going to edit will be edited from your account directly.if you are changing your email id then you should enter your new valid email id or you will not be able to login again. Your account will going to be permanentlylocked.</p>
    <br><br>
-   <form method="post">
-   {% csrf_token %}
-   <input type="email" value="{{ user.email }}" name="email1" hidden >
-   <button  class="btn btn-primary" style="background-color:#36454f; display: block;
+
+  <a href="BankDetailsNotice.html-{{user.email}}" class="btn btn-primary" style="background-color:#36454f; display: block;
     margin-left: auto;
-    margin-right: auto;" type="submit" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent4" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><h5 class="card-title">Continue </h5></button></form>
+    margin-right: auto;" type="submit" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent4" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><h5 class="card-title">Continue </h5></a>
       
              </div>
  

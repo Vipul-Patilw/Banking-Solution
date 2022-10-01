@@ -62,7 +62,17 @@
    
    
 }
-   
+td li{
+     border: 1px solid lightgrey;
+    border-right: none;
+    border-left: none;
+    margin-top: -9px;
+    padding-top: 18px;
+    width: 108%;
+    margin-left: -9px;
+    height: 106px;
+    border-bottom: none;
+}  
  </style>  
 <body>
 
@@ -152,16 +162,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent3">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item my-3">
-        <table id=color>
+        <table id="color" class="table-bordered">
                 <tr><th> Amount Credit     </th>
                 <th> Amount Withdraw     </th>
                 <th> Money Send     </th>
+                <th> Money Rescived     </th>
                 <th> Mobile Recharge    </th></tr>
                 <tr><td style="vertical-align: text-top;">   
          {% for credit in credits %}
         
           <li> <h5>&#8377 {{credit}}</h5>
-                <p>{{credit.add}}</P> </li> 
+                <p>{{credit.date}}</P> </li> 
         
             
          {% endfor %}
@@ -171,7 +182,7 @@
         {% for withdraw in withdraws %}
         
          <li> <h5>&#8377 {{withdraw}}</h5>
-            <p>{{withdraw.add}}</P> </li>
+            <p>{{withdraw.date}}</P> </li>
         
         {% endfor %}
         
@@ -180,7 +191,18 @@
         {% for moneysend in moneysends %}
          
          <li><h5>&#8377 {{moneysend}} </h5>
-            <p>{{moneysend.add}}</P> </li>
+            <p><strong>TO:</strong> {{moneysend.holder_name}}</p>
+            <p>{{moneysend.date}}</P> </li>
+        
+           
+        {% endfor %}
+        </td>
+         <td style="vertical-align: text-top;">
+        {% for moneyrecive in moneyrecived %}
+         
+         <li><h5>&#8377 {{moneyrecive}} </h5>
+            <p><strong>From:</strong> {{moneyrecive.name}}</p>
+            <p>{{moneyrecive.date}}</P> </li>
         
            
         {% endfor %}
@@ -189,12 +211,13 @@
         {% for recharge in recharges %}
         
          <li><h5>&#8377 {{recharge}} </h5>
-            <p>{{recharge.add}}</P> </li>
+            <p>{{recharge.date}}</P> </li>
         
            
         {% endfor %}
         </td></tr>
         </table>
+        </li></ul>
     </div> 
   </div>      
     

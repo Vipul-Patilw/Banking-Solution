@@ -2,6 +2,7 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from traitlets import default
 # Create your models here.
 class Login(models.Model):
 	
@@ -39,44 +40,45 @@ class Sign(models.Model):
 		return self.name
 	
 class Chat(models.Model):
-	    email  = models.CharField(max_length=122)
-	    msg = models.CharField(max_length=122)
+	email  = models.CharField(max_length=122)
+	msg = models.CharField(max_length=122)
 	    
 	    
 class Credit(models.Model):
-	add = add = models.CharField(max_length=122,default=datetime.now)
 	amount = models.CharField(max_length=122)
 	email = models.CharField(max_length=122)
+	date = models.CharField(max_length=122,default="")
 	def __str__(self):
 		return self.amount
 		
 		
 class Withdraw(models.Model):
-	add = models.CharField(max_length=122,default=datetime.now)
 	amount2 = models.CharField(max_length=122)
 	email = models.CharField(max_length=122)
 	password = models.CharField(max_length=122)
+	date = models.CharField(max_length=122,default="")
 	def __str__(self):
 		return self.amount2
 		
 class SendMoney(models.Model):
-		add = datetime.now
 		note = models.CharField(max_length=122)
 		my_account_number = models.CharField(max_length=122)
 		account_number= models.CharField(max_length=122)
 		confirm_number= models.CharField(max_length=122)
-		amount= models.FloatField(max_length=122)
+		amount= models.CharField(max_length=122)
 		Bank = models.CharField(max_length=122)
 		name = models.CharField(max_length=122,default=0)
 		email = models.CharField(max_length=122,default="")
+		date = models.CharField(max_length=122,default="")
+		holder_name = models.CharField(max_length=122,default=0)
 		def __str__(self):
 			return self.amount
 
 class MobileRecharge(models.Model):
-		add = datetime.now
 		amount= models.CharField(max_length=122)
 		password = models.CharField(max_length=122)
 		email = models.CharField(max_length=122)
+		date = models.CharField(max_length=122,default="")
 		def __str__(self):
 			return self.amount
 	
@@ -100,6 +102,7 @@ class Lock2(models.Model):
 	email = models.CharField(max_length=122)
 	pin1 = models.CharField(max_length=122)
 	pin2 = models.CharField(max_length=122)
+	account_number = models.CharField(max_length=122,default="")
 
 
 class Lock(models.Model):
