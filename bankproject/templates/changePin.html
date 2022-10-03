@@ -550,9 +550,9 @@
 <form method="post">
   {% csrf_token %}
   <input type="email" value="{{ user.email }}" name="email" hidden>
-<input type="text" pattern="[0-9]*" inputmode="numeric" style="-webkit-text-security:disc;" maxlength="4" placeholder="  enter old Pin" name="old_pin" required><br> <br>
-<input type="text" pattern="[0-9]*" inputmode="numeric" style="-webkit-text-security:disc;" maxlength="4" placeholder="  enter new Pin " name="new_pin1" required><br> <br>
-<input type="text" pattern="[0-9]*" inputmode="numeric" style="-webkit-text-security:disc;" maxlength="4" placeholder="  confirm Pin" name="new_pin2" required><br> <br>
+<input type="text" pattern="[0-9]*" autocomplete="off" inputmode="numeric" style="-webkit-text-security:disc;" maxlength="4" placeholder="  enter old Pin" name="old_pin" required><br> <br>
+<input type="text" pattern="[0-9]*" autocomplete="off" inputmode="numeric" style="-webkit-text-security:disc;" maxlength="4" placeholder="  enter new Pin " name="new_pin1" required><br> <br>
+<input type="text" pattern="[0-9]*" autocomplete="off" inputmode="numeric" style="-webkit-text-security:disc;" maxlength="4" placeholder="  confirm Pin" name="new_pin2" required><br> <br>
 
 
 <button class="button" type="submit">DONE</button><br><br><br><br>
